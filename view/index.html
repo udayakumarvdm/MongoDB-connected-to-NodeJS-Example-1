@@ -1,0 +1,314 @@
+<html>
+<head>
+  <title>Express HTML</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+  <div style="margin:100px;">
+
+<nav class="navbar navbar-inverse navbar-static-top">
+  <div class="container">
+    <a class="navbar-brand" href="/">Recipient List</a>
+    
+        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" id="recipentPlus" style="">Recipient + </button>
+<button type="button" class="btn btn-danger btn-lg" id="recipientBack" style="display:none" onclick="Back()">Back</button>
+     
+  </div>
+</nav>
+
+
+    
+
+    <div class="jumbotron"  style="padding:40px;">
+      	<table class="table">
+		<thead>
+			<tr>
+				<th>Hospital Name</th>			
+				<th>Address</th>
+				<th>Phone Number</th>
+				<th>Recipient Name</th>
+				<th>Recipient Blood Group</th>
+				<th>Donor Blood Groups</th>
+				<th>Blood Need Urgent</th>
+				<th>Action</th>
+			</tr>	
+		</thead>
+		
+		
+		<tbody>
+		{% for x in values %}
+			{% if x.BloodNeedUrgent == "Yes" %}
+			<tr style="background-color:yellow">
+				<td>{{x.hospitalName}}</td>			
+				<td>{{x.hospitalAddress1}}, {{x.hospitalAddress2}}, {{x.hospitalAddress3}}</td>
+				<td>{{x.hospitalPhoneNumber}}</td>
+				<td>{{x.RecipientName}}</td>
+				<td>{{x.RecipientBloodGroup}}</td>
+				<td>{{x.AcceptableDonorBloodGroup}}</td>
+				<td>
+					<input type="checkbox" name="vehicle" value="Car" checked>
+				</td>
+				<td><a href="#" style="color:red">Donate</a></td>
+			<tr>	
+			{% else %}
+			<tr>
+				<td>{{x.hospitalName}}</td>			
+				<td>{{x.hospitalAddress1}}, {{x.hospitalAddress2}}, {{x.hospitalAddress3}}</td>
+				<td>{{x.hospitalPhoneNumber}}</td>
+				<td>{{x.RecipientName}}</td>
+				<td>{{x.RecipientBloodGroup}}</td>
+				<td>{{x.AcceptableDonorBloodGroup}}</td>
+				<td>
+					<input type="checkbox" name="vehicle" value="Car" unchecked>
+				</td>
+				<td><a href="#" style="color:red">Donate</a></td>
+			<tr>
+			{% endif %}
+		{% endfor %}
+		</tbody>
+
+	</table>
+     	
+    </div>
+  </div>
+  
+<!-- Modal -->
+
+<!-- Trigger the modal with a button -->
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add Recipient</h4>
+      </div>
+      <div class="modal-body" style="height:60%">
+	<form method="post" action="/addRecipient" id="addRecipientForm">
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<label>Hospital Name:<span style="color:red">*</span></label>
+			</div>
+			<div class="col-md-6">
+				<input type="text" class="form-control" value="" name="hospitalName" id="hospitalName" />
+			</div>
+		</div>
+		<div class="col-md-12"></div>
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<label>Hospital Address:<span style="color:red">*</span></label>
+			</div>
+			<div class="col-md-6">
+				<input type="text" class="form-control" value="" name="hospitalAddress" id="hospitalAddress" />
+			</div>
+		</div>
+		<div class="col-md-12"></div>
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<label>Hospital City:<span style="color:red">*</span></label>
+			</div>
+			<div class="col-md-6">
+				<input type="text" value="" class="form-control" name="hospitalCity" id="hospitalCity" />
+			</div>
+		</div>
+		<div class="col-md-12"></div>
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<label>Hospital State:<span style="color:red">*</span></label>
+			</div>
+			<div class="col-md-6">
+				<input type="text" value="" class="form-control" name="hospitalState" id="hospitalState" />
+			</div>
+		</div>
+		<div class="col-md-12"></div>
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<label>Hospital Phone Number:<span style="color:red">*</span></label>
+			</div>
+			<div class="col-md-6">
+				<input type="text" value="" class="form-control" name="hospitalPhoneNumber" id="hospitalPhoneNumber" onkeypress="javascript:return isNumber(event)"  />
+			</div>
+		</div>
+		<div class="col-md-12"></div>
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<label>Recipient Name:<span style="color:red">*</span></label>
+			</div>
+			<div class="col-md-6">
+				<input type="text" value="" class="form-control" name="recipientName" id="recipientName" />
+			</div>
+		</div>
+		<div class="col-md-12"></div>
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<label>Recipient Blood Group:<span style="color:red">*</span></label>
+			</div>
+			<div class="col-md-6" >
+				<select class="form-control" onChange="RecipientBloodGroup()" name="recipientBloodGroup" id="recipientBloodGroup">
+					<option value="">Please Select</option>
+					<option value="A+">A+</option>
+					<option value="O+">O+</option>
+					<option value="B+">B+</option>
+					<option value="AB+">AB+</option>
+					<option value="A-">A-</option>
+					<option value="O-">O-</option>
+					<option value="B-">B-</option>
+					<option value="AB-">AB-</option>
+				</select>
+			</div>
+		</div>
+		<div class="col-md-12"></div>
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<label>Acceptable Donor Blood Group:<span style="color:red">*</span></label>
+			</div>
+			<div class="col-md-6" >
+				<input type="text" class="form-control" name="acceptableDonorBloodGroup" id="acceptableDonorBloodGroup" readonly />
+			</div>
+		</div>
+		<div class="col-md-12"></div>
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<label>Blood need is urgent:<span style="color:red">*</span></label>
+			</div>
+			<div class="col-md-6" >
+				<select class="form-control" name="bloodNeedIsUrgent" id="bloodNeedIsUrgent">
+					<option value="">Please select</option>
+					<option value="Yes">Yes</option>
+					<option value="No">No</option>
+				</select>
+				
+			</div>
+		</div>
+		<div class="col-md-12"></div>
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<label>Unit required:<span style="color:red">*</span></label>
+			</div>
+			<div class="col-md-6">
+				<input type="text" class="form-control" value="" name="unitRequire" id="unitRequire" onkeypress="javascript:return isNumber(event)" />
+			</div>
+		</div>
+	</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" onclick="save()">Save</button>
+        <button type="button" class="btn btn-danger" id="closeBtn">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+	function save() {
+    var hospitalName = document.getElementById("hospitalName").value;
+    var hospitalAddress = document.getElementById("hospitalAddress").value;
+    var hospitalCity = document.getElementById("hospitalCity").value;
+    var hospitalState = document.getElementById("hospitalState").value;
+    var hospitalPhoneNumber = document.getElementById("hospitalPhoneNumber").value;
+    var recipientName = document.getElementById("recipientName").value;
+    var recipientBloodGroup = document.getElementById("recipientBloodGroup").value;
+    var acceptableDonorBloodGroup = document.getElementById("acceptableDonorBloodGroup").value;
+    var bloodNeedIsUrgent = document.getElementById("bloodNeedIsUrgent").value;
+    var unitRequire = document.getElementById("unitRequire").value;
+
+    if (hospitalName !== '') {
+        if (hospitalAddress !== '') {
+            if (hospitalCity !== '') {
+                if (hospitalState !== '') {
+                    if (hospitalPhoneNumber !== '') {
+                        if (recipientName !== '') {
+                            if (recipientBloodGroup !== '') {
+                                if (acceptableDonorBloodGroup !== '') {
+                                    if (bloodNeedIsUrgent !== '') {
+                                        if (unitRequire !== '') {
+                                            $('#addRecipientForm').submit();
+                                        } else {
+                                            alert("Unit Require is Mandatory");
+                                        }
+                                    } else {
+                                        alert("Blood need urgent is Mandatory");
+                                    }
+                                } else {
+                                    alert("Acceptable Donor Blood Group is Mandatory");
+                                }
+                            } else {
+                                alert("Recipient Blood Group is Mandatory");
+                            }
+                        } else {
+                            alert("Recipient name is Mandatory");
+                        }
+                    } else {
+                        alert("Hospital phone number is Mandatory");
+                    }
+                } else {
+                    alert("Hospital State is Mandatory");
+                }
+            } else {
+                alert("Hospital City is Mandatory");
+            }
+        } else {
+            alert("Hospital Address is Mandatory");
+        }
+    } else {
+        alert("Hospital name is Mandatory");
+    }
+
+
+}
+
+// WRITE THE VALIDATION SCRIPT IN THE HEAD TAG.
+function isNumber(evt) {
+    var iKeyCode = (evt.which) ? evt.which : evt.keyCode
+    if (iKeyCode != 46 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57))
+        return false;
+
+    return true;
+}
+
+$('#closeBtn').on('click', function() {
+    $("#myModal").modal("hide");
+    $("#addRecipientForm").trigger('reset');
+});
+
+function RecipientBloodGroup() {
+    var bloodGroup = document.getElementById("recipientBloodGroup").value;
+    if (bloodGroup == "A+") {
+        $("#acceptableDonorBloodGroup").val('A+, AB+');
+    } else if (bloodGroup == "O+") {
+        $("#acceptableDonorBloodGroup").val('O+, A+, B+, AB+');
+    } else if (bloodGroup == "B+") {
+        $("#acceptableDonorBloodGroup").val('B+, AB+');
+    } else if (bloodGroup == "AB+") {
+        $("#acceptableDonorBloodGroup").val('AB+');
+    } else if (bloodGroup == "A-") {
+        $("#acceptableDonorBloodGroup").val('A+ A- AB+ AB-');
+    } else if (bloodGroup == "O-") {
+        $("#acceptableDonorBloodGroup").val('Everyone');
+    } else if (bloodGroup == "B-") {
+        $("#acceptableDonorBloodGroup").val('B+ B- AB+ AB-');
+    } else if (bloodGroup == "AB-") {
+        $("#acceptableDonorBloodGroup").val('AB+ AB-');
+    }
+}
+
+$(document).ready(function() {
+    if (window.location.pathname == "/addRecipient") {
+        $('#recipentPlus').hide();
+        $('#recipientBack').show();
+    }
+});
+
+function Back(){
+	location.href="/";
+}
+		
+</script>
+</body>
+</html>
