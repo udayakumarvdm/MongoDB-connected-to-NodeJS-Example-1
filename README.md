@@ -1,1 +1,1 @@
-# MongoDB-connection-using-Mongoose-and-Node-JS
+# MongoDB connection using Mongoose and NodeJS, Swig template, HTML, CSS, JS
